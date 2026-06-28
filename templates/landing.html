@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreatGuard - Phishing Detection System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0e14;
+            font-family: 'Inter', sans-serif;
+            color: #e8edf5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .logo i {
+            font-size: 44px;
+            color: #4a9eff;
+        }
+
+        .title {
+            font-size: 68px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #4a9eff, #6c5ce7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            font-weight: 300;
+            color: #9aa6b5;
+            margin-bottom: 60px;
+        }
+
+        .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto 70px;
+        }
+
+        .member {
+            background: #151b24;
+            padding: 28px 16px 20px;
+            border-radius: 18px;
+            border: 1px solid #262e3a;
+            transition: 0.3s ease;
+        }
+
+        .member:hover {
+            border-color: #4a9eff;
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e2a3a, #2a3a4e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #4a9eff;
+            border: 2px solid #2e4058;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f0f4fa;
+            margin-bottom: 4px;
+        }
+
+        .role {
+            font-size: 14px;
+            color: #8896a8;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #4a9eff, #6c5ce7);
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            box-shadow: 0 8px 32px rgba(74, 158, 255, 0.25);
+        }
+
+        .cta-button i {
+            font-size: 24px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 48px rgba(74, 158, 255, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .title { font-size: 42px; }
+            .subtitle { font-size: 17px; }
+            .team { gap: 20px; }
+            .cta-button { font-size: 18px; padding: 14px 34px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-halved"></i>
+            <h1 class="title">ThreatGuard</h1>
+        </div>
+        <p class="subtitle">AI-driven phishing detection engineered for modern security</p>
+
+        <div class="team">
+            <div class="member">
+                <div class="avatar">HA</div>
+                <div class="name">Haseeb Ahmed</div>
+                <div class="role">Frontend &amp; Design</div>
+            </div>
+            <div class="member">
+                <div class="avatar">MA</div>
+                <div class="name">Moez Ali</div>
+                <div class="role">AI Research</div>
+            </div>
+            <div class="member">
+                <div class="avatar">BK</div>
+                <div class="name">Basit Kakar</div>
+                <div class="role">Backend &amp; Security</div>
+            </div>
+        </div>
+
+        <button class="cta-button" id="startButton">
+            <i class="fas fa-rocket"></i>
+            <span>Launch Dashboard</span>
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', () => {
+            window.location.href = "/dashboard";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreatGuard · Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0e14;
+            color: #e8edf5;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand i {
+            font-size: 36px;
+            color: #4a9eff;
+        }
+
+        .brand h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #4a9eff, #6c5ce7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand span {
+            font-weight: 300;
+            color: #8896a8;
+            font-size: 18px;
+            -webkit-text-fill-color: #8896a8;
+            margin-left: 6px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f4fa;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #8896a8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: #141b24;
+            border: 1px solid #232b36;
+            border-radius: 20px;
+            padding: 28px 26px;
+            transition: 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+            min-height: 380px;
+        }
+
+        .card:hover {
+            border-color: #3a4c62;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-shrink: 0;
+        }
+
+        .card-header i {
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
+            background: #1f2a36;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a9eff;
+            flex-shrink: 0;
+        }
+
+        .card-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .card-header p {
+            color: #8896a8;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input,
+        textarea,
+        .file-input {
+            width: 100%;
+            padding: 16px 18px;
+            background: #0f151d;
+            border: 1px solid #262f3b;
+            border-radius: 12px;
+            color: #e8edf5;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4a9eff;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.15);
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .file-input {
+            padding: 12px 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .btn-primary {
+            background: #4a9eff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #3a8ae6;
+        }
+
+        .btn-purple {
+            background: #6c5ce7;
+            color: #fff;
+        }
+        .btn-purple:hover {
+            background: #5a4bd1;
+        }
+
+        .btn-pink {
+            background: #e84393;
+            color: #fff;
+        }
+        .btn-pink:hover {
+            background: #d63384;
+        }
+
+        .btn-red {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-red:hover {
+            background: #c0392b;
+        }
+
+        .results-wrapper {
+            margin-top: 20px;
+            flex-shrink: 0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .results-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        .results-wrapper::-webkit-scrollbar-track {
+            background: #0f151d;
+            border-radius: 8px;
+        }
+        .results-wrapper::-webkit-scrollbar-thumb {
+            background: #2a3a4e;
+            border-radius: 8px;
+        }
+
+        .result-card {
+            padding: 20px 22px;
+            border-radius: 14px;
+            background: #10171f;
+            border-left: 6px solid #4a9eff;
+            margin-bottom: 12px;
+        }
+
+        .result-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-safe {
+            border-left-color: #2ecc71;
+        }
+        .result-danger {
+            border-left-color: #e74c3c;
+        }
+
+        .verdict-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .badge-safe {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+        .badge-danger {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #8896a8;
+            min-width: 90px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #e8edf5;
+            word-break: break-word;
+        }
+
+        .highlight-box {
+            background: #0c121a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 14px;
+            border: 1px solid #1f2935;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Inter', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .highlight-box::-webkit-scrollbar {
+            width: 5px;
+        }
+        .highlight-box::-webkit-scrollbar-track {
+            background: #0f151d;
+        }
+        .highlight-box::-webkit-scrollbar-thumb {
+            background: #2a3a4e;
+            border-radius: 8px;
+        }
+
+        .highlight-phishing {
+            background: rgba(231, 76, 60, 0.2);
+            color: #f1948a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .emails-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 18px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .emails-grid::-webkit-scrollbar {
+            width: 5px;
+        }
+        .emails-grid::-webkit-scrollbar-track {
+            background: #0f151d;
+            border-radius: 8px;
+        }
+        .emails-grid::-webkit-scrollbar-thumb {
+            background: #2a3a4e;
+            border-radius: 8px;
+        }
+
+        .email-card {
+            background: #10171f;
+            border: 1px solid #1f2935;
+            border-radius: 14px;
+            padding: 18px 20px;
+            transition: 0.2s;
+        }
+
+        .email-card:hover {
+            border-color: #3a4c62;
+        }
+
+        .email-sender {
+            font-weight: 600;
+            color: #4a9eff;
+            font-size: 14px;
+        }
+
+        .email-subject {
+            font-weight: 500;
+            margin: 6px 0 10px;
+            font-size: 15px;
+        }
+
+        .email-verdict {
+            display: inline-block;
+            padding: 3px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .verdict-scam {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+        }
+        .verdict-safe {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+
+        details summary {
+            cursor: pointer;
+            color: #4a9eff;
+            font-weight: 500;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #1f2935;
+            border-top: 4px solid #4a9eff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 18px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== FIXED FOOTER - Proper spacing ===== */
+        .footer {
+            text-align: center;
+            padding: 32px 0 16px;
+            border-top: 1px solid #1a232e;
+            margin-top: 50px;
+        }
+
+        .footer .ai-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #1a232e;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #b0c4de;
+            margin-bottom: 16px;
+        }
+
+        .footer .back-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 12px 34px;
+            background: transparent;
+            border: 1px solid #4a9eff;
+            color: #4a9eff;
+            border-radius: 40px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            font-size: 15px;
+        }
+
+        .footer .back-btn:hover {
+            background: rgba(74, 158, 255, 0.1);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .emails-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+            .stats {
+                justify-content: space-around;
+                gap: 12px;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-value {
+                font-size: 22px;
+            }
+            .brand h1 {
+                font-size: 26px;
+            }
+            .emails-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header class="header">
+            <div class="brand">
+                <i class="fas fa-shield-halved"></i>
+                <h1>ThreatGuard <span>· Dashboard</span></h1>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="scans-count">0</div>
+                    <div class="stat-label">Scans</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="threats-blocked">0</div>
+                    <div class="stat-label">Threats</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="safe-emails">0</div>
+                    <div class="stat-label">Safe</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="accuracy-rate">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+
+            <!-- URL SCANNER -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-link"></i>
+                    <div><h2>URL Scanner</h2><p>Analyze suspicious links</p></div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/predict" onsubmit="showLoading()" style="flex-shrink:0;">
+                        <div class="input-group">
+                            <input type="text" name="url" placeholder="https://example.com" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Scan URL</button>
+                    </form>
+                    {% if predicted_class %}
+                    <div class="results-wrapper">
+                        <div class="result-card {% if predicted_class == 'malicious' %}result-danger{% elif predicted_class == 'suspicious' %}result-danger{% else %}result-safe{% endif %}">
+                            <div class="verdict-badge {% if predicted_class == 'malicious' or predicted_class == 'suspicious' %}badge-danger{% else %}badge-safe{% endif %}">
+                                {% if predicted_class == 'malicious' %}<i class="fas fa-triangle-exclamation"></i> Threat Detected
+                                {% elif predicted_class == 'suspicious' %}<i class="fas fa-exclamation-circle"></i> Suspicious
+                                {% else %}<i class="fas fa-check-circle"></i> Secure{% endif %}
+                            </div>
+                            <div class="detail-row"><span class="detail-label">URL</span><span class="detail-value">{{ input_url }}</span></div>
+                            <div class="detail-row"><span class="detail-label">Verdict</span><span class="detail-value" style="font-weight:700;color:{% if predicted_class == 'malicious' or predicted_class == 'suspicious' %}#e74c3c{% else %}#2ecc71{% endif %}">{{ predicted_class.upper() }}</span></div>
+                            <div class="detail-row"><span class="detail-label">Analysis</span><span class="detail-value">{{ url_reason }}</span></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- FILE SCANNER -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-file-upload"></i>
+                    <div><h2>File Analysis</h2><p>Upload PDF, TXT, or image</p></div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/scam/" enctype="multipart/form-data" onsubmit="showLoading()" style="flex-shrink:0;">
+                        <div class="input-group">
+                            <input type="file" name="file" class="file-input" accept=".pdf,.txt,.png,.jpg,.jpeg" required>
+                        </div>
+                        <button type="submit" class="btn btn-purple"><i class="fas fa-cloud-upload-alt"></i> Upload &amp; Scan</button>
+                    </form>
+                    {% if file_result %}
+                    <div class="results-wrapper">
+                        <div class="result-card {% if 'scam' in file_result|lower or 'fake' in file_result|lower %}result-danger{% else %}result-safe{% endif %}">
+                            <div class="verdict-badge {% if 'scam' in file_result|lower or 'fake' in file_result|lower %}badge-danger{% else %}badge-safe{% endif %}">
+                                {% if 'scam' in file_result|lower or 'fake' in file_result|lower %}<i class="fas fa-triangle-exclamation"></i> Suspicious File
+                                {% else %}<i class="fas fa-file-check"></i> Safe File{% endif %}
+                            </div>
+                            <div class="detail-row"><span class="detail-label">Verdict</span><span class="detail-value" style="font-weight:700;">{{ file_result }}</span></div>
+                            <div class="detail-row"><span class="detail-label">Analysis</span><span class="detail-value">{{ file_reason }}</span></div>
+                            {% if file_keywords and file_keywords|length > 1 %}
+                            <div class="detail-row"><span class="detail-label">Keywords</span><span class="detail-value">{% for kw in file_keywords %}<span class="highlight-phishing" style="margin-right:4px;">{{ kw }}</span>{% endfor %}</span></div>
+                            {% endif %}
+                            {% if file_highlighted %}<div class="highlight-box"><strong>📄 Content analysis:</strong><br><br>{{ file_highlighted|safe }}</div>{% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- EMAIL ANALYZER -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-envelope"></i>
+                    <div><h2>Email Analyzer</h2><p>Paste email content for deep scan</p></div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/email/" onsubmit="showLoading()" style="flex-shrink:0;">
+                        <div class="input-group">
+                            <textarea name="email_text" placeholder="Paste email content..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-pink"><i class="fas fa-robot"></i> Analyze Email</button>
+                    </form>
+                    {% if email_result %}
+                    <div class="results-wrapper">
+                        <div class="result-card {% if 'scam' in email_result|lower or 'fake' in email_result|lower %}result-danger{% else %}result-safe{% endif %}">
+                            <div class="verdict-badge {% if 'scam' in email_result|lower or 'fake' in email_result|lower %}badge-danger{% else %}badge-safe{% endif %}">
+                                {% if 'scam' in email_result|lower or 'fake' in email_result|lower %}<i class="fas fa-bug"></i> Phishing Detected
+                                {% else %}<i class="fas fa-envelope-open-text"></i> Legitimate{% endif %}
+                            </div>
+                            <div class="detail-row"><span class="detail-label">Verdict</span><span class="detail-value" style="font-weight:700;">{{ email_result }}</span></div>
+                            <div class="detail-row"><span class="detail-label">Reason</span><span class="detail-value">{{ email_reason }}</span></div>
+                            {% if highlighted_email %}<div class="highlight-box"><strong>🔍 AI highlights:</strong><br><br>{{ highlighted_email|safe }}</div>{% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- GMAIL SCANNER -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fab fa-google"></i>
+                    <div><h2>Gmail Scanner</h2><p>Scan last 10 emails</p></div>
+                </div>
+                <div class="card-body">
+                    {% if gmail_error %}
+                    <div class="result-card result-danger" style="margin-bottom:18px;flex-shrink:0;">
+                        <span class="detail-label" style="color:#e74c3c;"><i class="fas fa-exclamation-circle"></i> Error:</span>
+                        <span class="detail-value">{{ gmail_error }}</span>
+                    </div>
+                    {% endif %}
+                    <a href="/connect-gmail" style="text-decoration:none;flex-shrink:0;">
+                        <button class="btn btn-red"><i class="fas fa-plug"></i> Connect Gmail</button>
+                    </a>
+                    {% if gmail_emails %}
+                    <div class="emails-grid">
+                        {% for email in gmail_emails %}
+                        <div class="email-card">
+                            <div class="email-sender"><i class="fas fa-user-circle"></i> {{ email.sender[:30] }}{% if email.sender|length > 30 %}...{% endif %}</div>
+                            <div class="email-subject">{{ email.subject[:50] }}{% if email.subject|length > 50 %}...{% endif %}</div>
+                            <div class="email-verdict {% if 'scam' in email.verdict|lower or 'fake' in email.verdict|lower %}verdict-scam{% else %}verdict-safe{% endif %}">{{ email.verdict }}</div>
+                            <div style="color:#8896a8;font-size:13px;margin:8px 0;">{{ email.reason[:60] }}...</div>
+                            <details><summary><i class="fas fa-chevron-down"></i> Full analysis</summary>
+                                <div class="highlight-box" style="margin-top:10px;font-size:12px;max-height:150px;">{{ email.highlighted|safe }}</div>
+                            </details>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loadingOverlay">
+            <div class="spinner"></div>
+            <h3 style="color:#4a9eff;">AI Analysis in progress</h3>
+            <p style="color:#8896a8;">Scanning with neural networks…</p>
+        </div>
+
+        <!-- ===== FIXED FOOTER - Everything on separate lines ===== -->
+        <footer class="footer">
+            <div class="ai-chip">
+                <i class="fas fa-brain"></i> Powered by Groq AI &amp; Llama 3.3 70B
+            </div>
+            <button class="back-btn" onclick="goToHome()">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </button>
+        </footer>
+
+    </div>
+
+    <script>
+        async function fetchStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('scans-count').textContent = data.total_scans || 0;
+                document.getElementById('threats-blocked').textContent = data.total_threats || 0;
+                document.getElementById('safe-emails').textContent = data.total_safe || 0;
+                document.getElementById('accuracy-rate').textContent = (data.accuracy || 0) + '%';
+                
+                window.statsData = data;
+                
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+                loadStatsFromLocal();
+            }
+        }
+
+        function loadStatsFromLocal() {
+            const stats = JSON.parse(localStorage.getItem('threatguard_stats') || '{"total_scans":0,"total_threats":0,"total_safe":0,"accuracy":0}');
+            document.getElementById('scans-count').textContent = stats.total_scans || 0;
+            document.getElementById('threats-blocked').textContent = stats.total_threats || 0;
+            document.getElementById('safe-emails').textContent = stats.total_safe || 0;
+            document.getElementById('accuracy-rate').textContent = (stats.accuracy || 0) + '%';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchStats();
+            setInterval(fetchStats, 15000);
+        });
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                setTimeout(fetchStats, 2000);
+            });
+        });
+
+        function showLoading() {
+            const el = document.getElementById('loadingOverlay');
+            if (el) el.style.display = 'block';
+            setTimeout(() => { if (el) el.style.display = 'none'; }, 4000);
+        }
+
+        function goToHome() {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;inset:0;background:#0b0e14;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transition:0.4s;';
+            overlay.innerHTML = `<div class="spinner"></div><h3 style="color:#4a9eff;">Returning...</h3>`;
+            document.body.appendChild(overlay);
+            setTimeout(() => overlay.style.opacity = '1', 20);
+            setTimeout(() => window.location.href = '/', 1000);
+        }
+
+        (function addDots() {
+            const body = document.body;
+            for (let i = 0; i < 40; i++) {
+                const dot = document.createElement('div');
+                dot.style.cssText = `
+                    position:fixed;
+                    width:${Math.random()*2+1}px;
+                    height:${Math.random()*2+1}px;
+                    background:#2a3a4e;
+                    border-radius:50%;
+                    left:${Math.random()*100}%;
+                    top:${Math.random()*100}%;
+                    opacity:${Math.random()*0.3+0.1};
+                    pointer-events:none;
+                    z-index:0;
+                `;
+                body.appendChild(dot);
+            }
+        })();
+    </script>
+</body>
+</html>
